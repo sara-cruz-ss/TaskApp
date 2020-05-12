@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.12",
     "validator": "^10.9.0"

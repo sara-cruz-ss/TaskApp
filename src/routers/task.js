@@ -43,17 +43,14 @@ router.put("/tasks/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    const task = Task.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true },
-      (err, task) => {
-        if (err) {
-          return res.status(404).send("Problem");
-        }
-        res.send(task);
-      }
-    );
+    const task = await Task.findById(req.params.id)
+    updates.forEach((update) => task[update] = req.body[update])
+    await task.save();
+
+    if (!task) {
+       return res.status(404).send("Problem");
+    }
+    res.send(task); 
   } catch (e) {
     res.status(400).send(e);
   }
@@ -62,6 +59,7 @@ router.put("/tasks/:id", async (req, res) => {
 router.delete("/tasks/:id", async (req, res) => {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
+    
     if (!task) {
       return res.status(404).send();
     }
